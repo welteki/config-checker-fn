@@ -1,0 +1,43 @@
+# SA
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: openfaas-checker
+  namespace: openfaas-fn
+---
+# ClusterRole
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels:
+    app: openfaas
+  name: openfaas-checker
+rules:
+- apiGroups: ["apps"]
+  resources: ["deployments"]
+  verbs: ["get","list"]
+- apiGroups: [""]
+  resources: ["namespaces"]
+  verbs:
+  - get
+  - list
+
+# ClusterRoleBinding
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  labels:
+    app: openfaas
+    component: faas-controller
+  name: openfaas-checker
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: openfaas-checker
+subjects:  
+  - kind: ServiceAccount
+    name: openfaas-checker
+    namespace: openfaas-fn
+---

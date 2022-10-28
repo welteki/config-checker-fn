@@ -1,0 +1,12 @@
+version: 1.0
+provider:
+  name: openfaas
+  gateway: http://127.0.0.1:8080
+functions:
+  config-checker:
+    lang: dockerfile
+    handler: ./config-checker
+    image: welteki2/config-checker:0.0.1
+    annotations:
+      com.openfaas.serviceaccount: openfaas-checker
+
